@@ -21,7 +21,7 @@ Build a terminal chatbot and learn:
 
 - [x] Project setup
 - [x] Virtual environment
-- [ ] API connection
+- [x] API connection
 - [ ] Chat history
 - [ ] Streaming
 - [ ] Save conversations
