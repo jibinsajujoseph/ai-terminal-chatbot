@@ -9,21 +9,32 @@ client = OpenAI()
 
 console = Console()
 
+messages = []
+
 while True:
     user_input = input("You: ")
 
     if user_input == "exit":
         break
 
+    messages.append({
+        "role": "user",
+        "content": user_input
+    })
+
     response = client.responses.create(
         model="gpt-5-mini",
-        input=user_input
+        input=messages
     )
 
     console.print(
     Panel(
         response.output_text,
         title="Bot"
+        )
     )
-)
     
+    messages.append({
+        "role": "assistant",
+        "content": response.output_text
+    })
