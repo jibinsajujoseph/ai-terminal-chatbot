@@ -1,9 +1,13 @@
 from openai import OpenAI
 from dotenv import load_dotenv
+from rich.panel import Panel
+from rich.console import Console
 
 load_dotenv()
 
 client = OpenAI()
+
+console = Console()
 
 while True:
     user_input = input("You: ")
@@ -16,5 +20,10 @@ while True:
         input=user_input
     )
 
-    print("Bot: ", response.output_text)
+    console.print(
+    Panel(
+        response.output_text,
+        title="Bot"
+    )
+)
     
