@@ -12,7 +12,7 @@ console = Console()
 messages = []
 
 while True:
-    user_input = input("You: ")
+    user_input = input("Ask anything: ")
 
     if user_input == "exit":
         break
