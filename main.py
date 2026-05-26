@@ -22,19 +22,23 @@ while True:
         "content": user_input
     })
 
-    response = client.responses.create(
+    full_response = ""
+
+    console.print("\n[bold green]Bot:[/bold green] ", end="")
+
+    with client.responses.stream(
         model="gpt-5-mini",
         input=messages
-    )
+    ) as stream:
 
-    console.print(
-    Panel(
-        response.output_text,
-        title="Bot"
-        )
-    )
-    
+        for event in stream:
+            if event.type == "response.output_text.delta":
+                print(event.delta, end="", flush=True)
+                full_response += event.delta
+
+    print("\n")
+
     messages.append({
         "role": "assistant",
-        "content": response.output_text
+        "content": full_response
     })
