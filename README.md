@@ -20,11 +20,15 @@ Build a terminal chatbot and learn:
 ## Current Status
 
 - [x] Project setup
-- [x] Virtual environment
 - [x] API connection
-- [x] Chat history
+- [x] Conversation memory
 - [x] Streaming
+- [ ] System prompts
 - [ ] Save conversations
+- [ ] Token usage tracking
+- [ ] Multi-model support
+- [ ] Retry logic
+- [ ] Logging
 
 ## Run
 
