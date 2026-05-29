@@ -17,13 +17,13 @@ Build a terminal chatbot and learn:
 - OpenAI SDK
 - dotenv
 
-## Current Status
+## Roadmap
 
 - [x] Project setup
 - [x] API connection
 - [x] Conversation memory
 - [x] Streaming
-- [ ] System prompts
+- [x] System prompts/Personas
 - [ ] Save conversations
 - [ ] Token usage tracking
 - [ ] Multi-model support
