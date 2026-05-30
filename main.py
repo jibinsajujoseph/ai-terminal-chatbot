@@ -43,7 +43,7 @@ while True:
 
     full_response = ""
 
-    console.print("\n[bold green]Bot:[/bold green] ", end="")
+    console.print(f"\n[bold green]{selected_role}:[/bold green] ", end="")
 
     with client.responses.stream(
         model="gpt-5-mini",
