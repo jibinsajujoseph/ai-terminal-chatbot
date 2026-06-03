@@ -1,9 +1,11 @@
-from openai import OpenAI
-from dotenv import load_dotenv
-from rich.console import Console
-from personas import roles, styles
-import os
 import json
+import os
+
+from dotenv import load_dotenv
+from openai import OpenAI
+from rich.console import Console
+
+from personas import roles, styles
 
 load_dotenv()
 client = OpenAI()
@@ -65,7 +67,13 @@ while True:
         "content": full_response
     })
 
+chat_data = {
+    "role": selected_role,
+    "style": selected_style,
+    "messages": conversation_history
+}
+
 os.makedirs("conversations", exist_ok=True)
 
 with open("conversations/chat_history.json", "w") as file:
-    json.dump(conversation_history, file, indent=4)
+    json.dump(chat_data, file, indent=4)
