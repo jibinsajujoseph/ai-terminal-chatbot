@@ -12,32 +12,52 @@ client = OpenAI()
 
 console = Console()
 
-print("Choose a role:")
-for key, value in roles.items():
-    print(f"{key}. {value}")
+conversation_history = []
 
-role_choice = input("Role: ")
+chat_file = "conversations/chat_history.json"
 
-print("\nChoose a style:")
-for key, value in styles.items():
-    print(f"{key}. {value}")
+if os.path.exists(chat_file):
+    print("\n1. Load chat")
+    print("2. New chat")
+    choice = input("Choice: ")
+else:
+    choice = "2"
 
-style_choice = input("Style: ")
+if choice == "1":
+    with open(chat_file, "r") as file:
+        chat_data = json.load(file)
+    selected_role = chat_data.get("role", "General Assistant")
+    selected_style = chat_data.get("style", "Friendly")
+    conversation_history = chat_data.get("messages", [])
+    print("Chat loaded successfully.")
+else:
+    print("\nStarting a new chat...")
 
-selected_role = roles.get(role_choice, "General Assistant")
-selected_style = styles.get(style_choice, "Friendly")
+if choice == "2":
+    print("Choose a role:")
+    for key, value in roles.items():
+        print(f"{key}. {value}")
+
+    role_choice = input("Role: ")
+
+    print("\nChoose a style:")
+    for key, value in styles.items():
+        print(f"{key}. {value}")
+
+    style_choice = input("Style: ")
+
+    selected_role = roles.get(role_choice, "General Assistant")
+    selected_style = styles.get(style_choice, "Friendly")
 
 instructions = f"""
 You are a {selected_role}.
 Your communication style is {selected_style}.
 """
 
-conversation_history = []
-
 while True:
     user_input = input("\nAsk anything: ")
 
-    if user_input == "exit":
+    if user_input.strip().lower() == "exit":
         break
 
     conversation_history.append({
@@ -75,5 +95,7 @@ chat_data = {
 
 os.makedirs("conversations", exist_ok=True)
 
-with open("conversations/chat_history.json", "w") as file:
+with open(chat_file, "w") as file:
     json.dump(chat_data, file, indent=4)
+
+print(f"Chat history saved to {chat_file}")
