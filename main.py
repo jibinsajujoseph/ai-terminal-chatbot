@@ -25,16 +25,20 @@ else:
 
 if choice == "1":
     with open(chat_file, "r") as file:
-        chat_data = json.load(file)
-    selected_role = chat_data.get("role", "General Assistant")
-    selected_style = chat_data.get("style", "Friendly")
-    conversation_history = chat_data.get("messages", [])
-    print("Chat loaded successfully.")
+        try:
+            chat_data = json.load(file)
+            selected_role = chat_data.get("role", "General Assistant")
+            selected_style = chat_data.get("style", "Friendly")
+            conversation_history = chat_data.get("messages", [])
+            print("\nChat loaded successfully. Continue with your chat...")
+        except json.JSONDecodeError:
+            print("\nChat history is corrupted. Starting a new chat..")
+            choice = "2"
 else:
     print("\nStarting a new chat...")
 
 if choice == "2":
-    print("Choose a role:")
+    print("\nChoose a role:")
     for key, value in roles.items():
         print(f"{key}. {value}")
 
@@ -54,6 +58,18 @@ You are a {selected_role}.
 Your communication style is {selected_style}.
 """
 
+def save_chat():
+    chat_data = {
+        "role": selected_role,
+        "style": selected_style,
+        "messages": conversation_history
+    }
+
+    os.makedirs("conversations", exist_ok=True)
+
+    with open(chat_file, "w") as file:
+        json.dump(chat_data, file, indent=4)
+
 while True:
     user_input = input("\nAsk anything: ")
 
@@ -69,33 +85,26 @@ while True:
 
     console.print(f"\n[bold green]{selected_role}:[/bold green] ", end="")
 
-    with client.responses.stream(
-        model="gpt-5-mini",
-        instructions=instructions,
-        input=conversation_history
-    ) as stream:
+    try:
+        with client.responses.stream(
+            model="gpt-5-mini",
+            instructions=instructions,
+            input=conversation_history
+        ) as stream:
 
-        for event in stream:
-            if event.type == "response.output_text.delta":
-                print(event.delta, end="", flush=True)
-                full_response += event.delta
+            for event in stream:
+                if event.type == "response.output_text.delta":
+                    print(event.delta, end="", flush=True)
+                    full_response += event.delta
 
-    print("\n")
+        print("\n")
+    except Exception as e:
+        console.print(f"\n[bold red]Error:[/bold red] {str(e)}")
+        continue
 
     conversation_history.append({
         "role": "assistant",
         "content": full_response
     })
 
-chat_data = {
-    "role": selected_role,
-    "style": selected_style,
-    "messages": conversation_history
-}
-
-os.makedirs("conversations", exist_ok=True)
-
-with open(chat_file, "w") as file:
-    json.dump(chat_data, file, indent=4)
-
-print(f"Chat history saved to {chat_file}")
+    save_chat()
