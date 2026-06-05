@@ -24,8 +24,8 @@ Build a terminal chatbot and learn:
 - [x] Conversation memory
 - [x] Streaming
 - [x] System prompts/Personas
-- [ ] Save conversations
-- [ ] Token usage tracking
+- [x] Save conversations
+- [x] Token usage tracking
 - [ ] Multi-model support
 - [ ] Retry logic
 - [ ] Logging

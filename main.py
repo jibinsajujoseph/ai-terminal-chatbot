@@ -58,6 +58,9 @@ You are a {selected_role}.
 Your communication style is {selected_style}.
 """
 
+session_input_tokens = 0
+session_output_tokens = 0
+
 def save_chat():
     chat_data = {
         "role": selected_role,
@@ -98,6 +101,18 @@ while True:
                     full_response += event.delta
 
         print("\n")
+        response = stream.get_final_response()
+
+        session_input_tokens += response.usage.input_tokens
+        session_output_tokens += response.usage.output_tokens
+
+        print(
+            f"\nTokens: "
+            f"in={response.usage.input_tokens}, "
+            f"out={response.usage.output_tokens}, "
+            f"session={session_input_tokens + session_output_tokens}"
+        )
+
     except Exception as e:
         console.print(f"\n[bold red]Error:[/bold red] {str(e)}")
         continue
